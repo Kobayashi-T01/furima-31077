@@ -69,11 +69,20 @@ describe User do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
-      
+      it 'first_nameがひらがな・漢字・カタカナ以外では登録できない' do
+        @user.first_name = "/.00"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("First name is invalid")
+      end
       it 'first_nameの情報が空だと登録できない' do
         @user.first_name = ""
         @user.valid?
         expect(@user.errors.full_messages).to include("First name can't be blank")
+      end
+      it 'family_nameがひらがな・漢字・カタカナ以外では登録できない' do
+        @user.family_name = "/.00"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Family name is invalid")
       end
       it 'family_nameの情報が空だと登録できない' do
         @user.family_name = ""
