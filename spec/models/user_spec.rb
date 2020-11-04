@@ -10,19 +10,6 @@ describe User do
       it '全ての情報が存在すれば登録できる' do
         expect(@user).to be_valid
       end
-      it 'passwordが6文字以上で登録できる' do
-        @user.password = "aaa000"
-        @user.password_confirmation = "aaa000"
-        expect(@user).to be_valid
-      end
-      it 'first_name_kanaがカナ入力で登録できる' do
-        @user.first_name_kana = "アオキ"
-        expect(@user).to be_valid
-      end
-      it 'family_name_kanaがカナ入力で登録できる' do
-        @user.family_name_kana = "ジロウ"
-        expect(@user).to be_valid
-      end
     end
 
     context '新規登録がうまくいかない時'do
@@ -36,6 +23,11 @@ describe User do
         @user.valid?
         expect(@user.errors.full_messages).to include("Email can't be blank")
       end
+      it 'emailに@がないとと登録できない' do
+        @user.email = "abc123.abc"
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Email is invalid")
+      end
       it '重複したemailが存在する場合は登録できない' do
         @user.save
         another_user = FactoryBot.build(:user)
@@ -48,9 +40,9 @@ describe User do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password can't be blank")
       end
-      it 'passwordが5文字以下では登録できない' do
-        @user.password = "00000"
-        @user.password_confirmation = "00000"
+      it 'passwordが英数混合だが、5文字以下では登録できない' do
+        @user.password = "aa000"
+        @user.password_confirmation = "aa000"
         @user.valid?
         expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
       end
@@ -71,9 +63,9 @@ describe User do
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
-      it 'passwordとpassword_confirmationが不一致では登録できない' do
-        @user.password = "000000"
-        @user.password_confirmation = "000001"
+      it 'passwordとpassword_confirmationが英数混合だが、不一致では登録できない' do
+        @user.password = "aa0000"
+        @user.password_confirmation = "aa0001"
         @user.valid?
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
