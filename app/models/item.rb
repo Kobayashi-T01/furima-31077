@@ -1,12 +1,21 @@
 class Item < ApplicationRecord
-  belongs_to :item
+  extend ActiveHash::Associations::ActiveRecordExtensions
+  belongs_to :category
+  belongs_to :status
+  belongs_to :delivery_fee
+  belongs_to :area
+  belongs_to :day
+
+
+  belongs_to :user
   has_one :buy
-  belongs_to_active_hash :category_id
-  belongs_to_active_hash :status_id
-  belongs_to_active_hash :delivery_fee_id
-  belongs_to_active_hash :area_id
-  belongs_to_active_hash :day_id
   has_one_attached :image
 
-  validates :title, presence: true
+  validates :title, :text, presence: true
+  validates :category_id, numericality: { other_than: 1 }
+  validates :status_id, numericality: { other_than: 1 }
+  validates :delivery_fee_id, numericality: { other_than: 1 }
+  validates :area_id, numericality: { other_than: 1 }
+  validates :day_id, numericality: { other_than: 1 }
+
 end
