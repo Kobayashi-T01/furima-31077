@@ -10,7 +10,8 @@ class Item < ApplicationRecord
   has_one :buy
   has_one_attached :image
 
-  validates :name, :explain, presence: true
+  validates :name, :explain, :image, presence: true
+  validates :price, presence: true, format: { with: /\A[0-9]+\z/ }, numericality: {greater_than:300, less_than_or_equal_to: 9999999}
   validates :category_id, numericality: { other_than: 1 }
   validates :status_id, numericality: { other_than: 1 }
   validates :delivery_fee_id, numericality: { other_than: 1 }
