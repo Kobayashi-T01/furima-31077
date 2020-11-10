@@ -12,10 +12,11 @@ class Item < ApplicationRecord
 
   validates :name, :explain, :image, presence: true
   validates :price, presence: true, format: { with: /\A[0-9]+\z/ }, numericality: {greater_than:300, less_than_or_equal_to: 9999999}
-  validates :category_id, numericality: { other_than: 1 }
-  validates :status_id, numericality: { other_than: 1 }
-  validates :delivery_fee_id, numericality: { other_than: 1 }
-  validates :area_id, numericality: { other_than: 1 }
-  validates :day_id, numericality: { other_than: 1 }
-
+  with_options numericality: { other_than: 1 } do
+    validates :category_id
+    validates :status_id
+    validates :delivery_fee_id
+    validates :area_id
+    validates :day_id
+  end
 end
